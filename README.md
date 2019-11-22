@@ -91,8 +91,6 @@ git clone https://zalonisvn.git.beanstalkapp.com/cd-zdp-monitoring.git
 source ./script.sh
 ```
 
-(For details about [assuming roles](https://drive.google.com/open?id=1LwZiwtnHHbRDbk6XpkKhjLg6U1W6hUNuxjHCLfEF15c) and the [script](https://drive.google.com/file/d/1nEgEsxgpFGw6t3bioKbIWHYUXiovF1pR/view))
-
 (The temporary credentials assigned, will time out after 1 hour of running the script. It will need to be run again after an hour)
 
 3. Copy the inventory/example folder, and paste it inside inventory folder with a different name of your choice (Eg: demo).
