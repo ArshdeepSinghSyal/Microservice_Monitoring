@@ -1,0 +1,31 @@
+
+plugin: aws_ec2  # change only is not using aws cloud for deploying ZDP
+regions:
+  - us-east-1
+filters:
+  tag:environment_name: mydemo # needs to be changed, should match the environment_name of your deployed zdp
+
+groups:
+  cdh_master1: "'cdh' in (tags.groupname.split(','))"
+  cdh_master2: "'cdh_master2' in (tags.groupname.split(','))"
+  cdh_master3: "'cdh_master3' in (tags.groupname.split(','))"
+  mysql: "'mysql' in (tags.groupname.split(','))"
+  worker_servers: "'worker_servers' in (tags.groupname.split(','))"
+  gateway_servers: "'utility_servers' in (tags.groupname.split(','))"
+  db_server: "'db_server' in (tags.groupname.split(','))"
+  scm_server: "'scm_server' in (tags.groupname.split(','))"
+  krb5_server: "'krb5_server' in (tags.groupname.split(','))"
+  registry: "'registry' in (tags.groupname.split(','))"
+  es: "'es' in (tags.groupname.split(','))"
+  gateway: "'gateway' in (tags.groupname.split(','))"
+  activemq: "'activemq' in (tags.groupname.split(','))"
+  logstash: "'logstash' in (tags.groupname.split(','))"
+  kibana: "'kibana' in (tags.groupname.split(','))"
+  lineage: "'lineage' in (tags.groupname.split(','))"
+  ingestionwarden: "'ingestionwarden' in (tags.groupname.split(','))"
+  executor: "'executor' in (tags.groupname.split(','))"
+  hive: "'hive' in (tags.groupname.split(','))"
+  mr: "'mr' in (tags.groupname.split(','))"
+  spark: "'spark' in (tags.groupname.split(','))"
+  dme: "'dme' in (tags.groupname.split(','))"
+  visualserver: "'Visual Instance' in tags.role"

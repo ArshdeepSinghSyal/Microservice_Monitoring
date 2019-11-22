@@ -1,0 +1,4 @@
+---
+# defaults file for apm
+
+  apm_major_version: 7.x

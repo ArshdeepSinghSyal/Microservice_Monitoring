@@ -1,0 +1,57 @@
+---
+# tasks file for APMAgent
+  - name: Create a directory if it does not exist
+    file:
+      path: /opt/apm-agent/
+      state: directory
+      mode: '0755'
+      owner: root
+      group: root
+
+  - name: Download APM agent
+    get_url: 
+      url: https://search.maven.org/remotecontent?filepath=co/elastic/apm/elastic-apm-agent/1.6.1/elastic-apm-agent-1.6.1.jar
+      dest: /opt/apm-agent/elastic-apm-agent-1.6.1.jar
+      mode: 0644
+      owner: root
+      group: root
+  
+  - name: Add APM java agent to {{zdp_service_name}} file
+    lineinfile:
+      path: /etc/sysconfig/{{zdp_service_name}}
+      regexp: '^JAVA_OPTS="\$JAVA_OPTS -javaagent'
+      line: JAVA_OPTS="$JAVA_OPTS -javaagent:/opt/apm-agent/elastic-apm-agent-1.6.1.jar -Delastic.apm.service_name={{zdp_service_name}} -Delastic.apm.log_file=/var/log/{{zdp_service_name}}/apm-agent.log -Delastic.apm.server_urls=http://{{hostvars[groups['visualserver'][0]]['ansible_fqdn']}}:8200 -Delastic.apm.application_packages={{zdp_package_name}}"
+      insertbefore: EOF  
+    when: zdp_service_name != "zdp-dme" and zdp_service_name != "zdp-activemq" and zdp_service_name != "zdp-es" and zdp_service_name != "zdp-logstash"
+
+  - name: Add APM java agent to ZDP DME file
+    lineinfile:
+      path: /etc/sysconfig/{{zdp_service_name}}
+      regexp: '^EXTRA_JAVA_OPTS="\$EXTRA_JAVA_OPTS -javaagent'
+      line: EXTRA_JAVA_OPTS="$EXTRA_JAVA_OPTS -javaagent:/opt/apm-agent/elastic-apm-agent-1.6.1.jar -Delastic.apm.service_name={{zdp_service_name}} -Delastic.apm.log_file=/var/log/{{zdp_service_name}}/apm-agent.log -Delastic.apm.server_urls=http://{{hostvars[groups['visualserver'][0]]['ansible_fqdn']}}:8200 -Delastic.apm.application_packages={{zdp_package_name}}"
+      insertbefore: EOF  
+    when:  zdp_service_name == "zdp-dme"
+
+  - name: Add APM java agent to ZDP ActiveMQ file
+    lineinfile:
+      path: /etc/sysconfig/{{zdp_service_name}}
+      regexp: '^ACTIVEMQ_OPTS="\$ACTIVEMQ_OPTS -javaagent'
+      line: ACTIVEMQ_OPTS="$ACTIVEMQ_OPTS -javaagent:/opt/apm-agent/elastic-apm-agent-1.6.1.jar -Delastic.apm.service_name=zdp-activemq -Delastic.apm.log_file=/var/log/zdp-activemq/apm-agent.log -Delastic.apm.server_urls=http://{{hostvars[groups['visualserver'][0]]['ansible_fqdn']}}:8200 -Delastic.apm.application_packages=com.zaloni"
+      insertbefore: EOF  
+    when:  zdp_service_name == "zdp-activemq"  
+
+  - name: Add APM java agent to ZDP Elasticsearch file
+    lineinfile:
+      path: /etc/sysconfig/{{zdp_service_name}}
+      regexp: '^ES_JAVA_OPTS="-javaagent'
+      line: ES_JAVA_OPTS="-javaagent:/opt/apm-agent/elastic-apm-agent-1.6.1.jar -Delastic.apm.service_name=zdp-es -Delastic.apm.log_file=/var/log/zdp-es/apm-agent.log -Delastic.apm.server_urls=http://{{hostvars[groups['visualserver'][0]]['ansible_fqdn']}}:8200 -Delastic.apm.application_packages=com.elastic"
+      insertbefore: EOF  
+    when:  zdp_service_name == "zdp-es"
+
+  - name: Add APM java agent to ZDP Logstash file
+    lineinfile:
+      path: /etc/sysconfig/{{zdp_service_name}}
+      regexp: '^export LS_JAVA_OPTS="-javaagent'
+      line: export LS_JAVA_OPTS="-javaagent:/opt/apm-agent/elastic-apm-agent-1.6.1.jar -Delastic.apm.service_name=zdp-logstash -Delastic.apm.log_file=/var/log/zdp-logstash/apm-agent.log -Delastic.apm.server_urls=http://{{hostvars[groups['visualserver'][0]]['ansible_fqdn']}}:8200 -Delastic.apm.application_packages=com.elastic"
+      insertbefore: EOF  
+    when: zdp_service_name == "zdp-logstash"

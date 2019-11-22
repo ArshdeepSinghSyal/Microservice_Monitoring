@@ -1,0 +1,31 @@
+---
+# tasks file for APMServer
+  - name: Add Elastic APM GPG key
+    rpm_key:
+      key: https://packages.elastic.co/GPG-KEY-elasticsearch
+      state: present
+  
+  - name: Add Elastic APM yum repository
+    template:
+      src: apm.repo.j2
+      dest: /etc/yum.repos.d/apm.repo
+      mode: 0644
+
+  - name: Install APM Server
+    yum: 
+      name: apm-server
+      state: installed
+  
+  - name: Configure APM Server
+    template:
+      src: apm-server.yml.j2
+      dest: /etc/apm-server/apm-server.yml
+      backup: yes
+      owner: root
+      group: apm-server
+      mode: 0750
+
+  - name: Start APM Server.
+    service: 
+      name: apm-server
+      state: restarted

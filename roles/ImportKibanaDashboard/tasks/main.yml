@@ -1,0 +1,10 @@
+---
+  - name: Import Dashborad to Kibana
+    uri:
+      url: http://{{ groups['visualserver'][0] }}:5601/api/kibana/dashboards/import
+      method: POST
+      body: "{{ lookup('file','JvmMemory.json') }}"
+      headers:
+        'kbn-xsrf': 'true'
+      status_code: 200
+      body_format: json

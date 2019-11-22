@@ -1,0 +1,12 @@
+---
+# defaults file for ProvisionVisualServer
+instance_type: t2.medium
+#security_group: arsh-securitygroup # change to zaloni-access
+image: ami-0c6b1d09930fac512 # This is the deafult amazon linux 2 image id
+#keypair: arshdeep # This is one of my keys that i already have in AWS
+region: us-east-1 # Change the Region
+#hostpath: "./hosts"
+count: 1
+# deployment_name: my-demo
+# env_name: my-demo
+#ec2_private_key_file: "~/.ssh/{{keypair}}.pem"

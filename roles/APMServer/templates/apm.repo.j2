@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+
+[elastic-{{ apm_major_version }}]
+name=Elastic repository for {{ apm_major_version }} packages
+baseurl=https://artifacts.elastic.co/packages/{{ apm_major_version }}/yum
+gpgcheck=1
+gpgkey=https://artifacts.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+autorefresh=1
+type=rpm-md

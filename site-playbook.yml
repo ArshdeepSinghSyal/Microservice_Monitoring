@@ -1,0 +1,136 @@
+---
+  - name: Provision EC2 Instance - Monitoring Server
+    hosts: localhost
+    connection: local
+    gather_facts: False
+    tags: provisioning
+    roles:
+      - ProvisionVisualServer
+
+  - name: Install & Configure Elasticsearch, Kibana & APM Server
+    hosts: visualserver
+    become: yes
+    gather_facts: True
+    tags: Installation & Configuration
+    roles: 
+      - Elasticsearch
+      - Kibana
+      - APMServer
+
+  - name: Install & Configure, APM Agent on Registry
+    hosts: registry
+    become: yes
+    gather_facts: False
+    tags: Installation & Configuration (APM Agent)
+    vars:
+      zdp_package_name: io.github.jhipster.registry
+      zdp_service_name: zdp-registry
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Gateway
+    hosts: gateway
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-gateway
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Lineage Tracker
+    hosts: lineage
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-lineage
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Workflow Executor
+    hosts: executor
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-executor
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on MR Executor
+    hosts: mr 
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-mr
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on DME
+    hosts: dme
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: "zdp-dme"
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Hive
+    hosts: hive
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-hive
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Spark
+    hosts: spark
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-spark
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Ingestion Warden
+    hosts: ingestionwarden
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-ingestion-warden
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on ActiveMQ
+    hosts: activemq
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-activemq
+    roles: 
+      - APMAgent
+
+  - name: Install & Configure, APM Agent on Elasticsearch
+    hosts: es
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_service_name: zdp-es
+    roles: 
+      - APMAgent  
+
+  - name: Install & Configure, APM Agent on Logstash
+    hosts: logstash
+    become: yes
+    gather_facts: False
+    vars:
+      zdp_package_name: com.elastic
+      zdp_service_name: zdp-logstash
+    roles: 
+      - APMAgent   
+
+  - name: Import Kibana Dashboard
+    hosts: localhost
+    gather_facts: True
+    tags: Kibana Visualisation
+    roles:
+      - ImportKibanaDashboard

@@ -1,0 +1,6 @@
+---
+  deployment_name: mydemo  # change the deployment-name
+  env_name: mydemo # # change the environment name to match the environment name of the deployed zdp aws instance
+  keypair: arshdeep # This is one of my aws private keys, change it to the name of your aws private key file
+  ec2_private_key_file: "~/.ssh/{{keypair}}.pem"
+  security_group: "{{deployment_name}}-securitygroup"

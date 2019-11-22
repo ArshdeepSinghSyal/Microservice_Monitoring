@@ -1,0 +1,52 @@
+---
+# tasks file for Elasticsearch
+  - name: Add Elasticsearch GPG key.
+    rpm_key:
+      key: https://packages.elastic.co/GPG-KEY-elasticsearch
+      state: present
+
+  - name: Add Elasticsearch yum repository.
+    template:
+      src: elasticsearch.repo.j2
+      dest: /etc/yum.repos.d/elasticsearch.repo
+      mode: 0644
+      
+  - name: Install Java 8
+    yum:
+      name: java-1.8.0-openjdk-devel
+      state: installed
+
+  - name: Install Elasticsearch.
+    yum: 
+      name: elasticsearch
+      state: installed
+
+  - name: Configure Elasticsearch. (elasticsearch.yml)
+    template:
+      src: elasticsearch.yml.j2
+      dest: /etc/elasticsearch/elasticsearch.yml
+      backup: yes
+      owner: root
+      group: elasticsearch
+      mode: 0750
+
+  - name: Configure Elasticsearch. (jvm.options)
+    template:
+      src: jvm.options.j2
+      dest: /etc/elasticsearch/jvm.options
+      backup: yes
+      owner: root
+      group: elasticsearch
+      mode: 0750
+
+  - name: Restart Elasticsearch
+    service: 
+      name: elasticsearch
+      state: restarted
+  
+  - name: Start Elasticsearch.
+    service: 
+      name: elasticsearch 
+      state: restarted
+      enabled: yes
+    ignore_errors: true
